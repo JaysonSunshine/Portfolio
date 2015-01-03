@@ -1,1 +1,1 @@
-I submitted a working project before 12a, but I resubmitted just now with additional comments to my code, and one functionality change so that the output filename is correct. No changes were made to the raytracer portion of the program. I don't know if it matters, but I thought I'd include it for the record.
+
