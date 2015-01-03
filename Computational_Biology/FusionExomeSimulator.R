@@ -1,6 +1,9 @@
-library(hash)
+library(hash) #this package allows for usage of hash-implemented data structures
 
-#functions
+#This function generates a string composed of the letters A, C, G, and T with length from
+#normal distribution with mean 150 and standard deviation 35, simulating the coding
+#portion of exons in DNA. n is the number of simulated genes this function will
+#generate
 gene <- function(n){ #min exon length is 30
   size = rnorm(1,150,35)
   while(size < 30){
@@ -19,6 +22,8 @@ gene <- function(n){ #min exon length is 30
   return(a)
 }
 
+#genome creates a simulated genome containing n genes each containing 10 exons produced from
+#the gene function
 genome <- function(n){
   a = list(gene(10))
   if(n > 1){
@@ -29,43 +34,22 @@ genome <- function(n){
   return(a)
 }
 
-reads <- function(genome, y, fusion_exon = FALSE){
-  if(fusion_exon == FALSE){
-    n = sample(1:length(genome), y, replace = TRUE) #sample a gene
-    a = list(unlist(genome[n[1]]))
-    if(y > 1){
+#This function simulates taking y reads from a provided genome, each read is exactly one entire
+#gene found in genome.
+reads <- function(genome, y){
+  n = sample(1:length(genome), y, replace = TRUE) #sample a gene
+  a = list(unlist(genome[n[1]]))
+  if(y > 1){
     for(i in 2:y){
       a[i] = list(unlist(genome[n[i]]))
-    }
-  }
-  }
-  else{
-    valid = TRUE
-    while(valid){
-      n = sample(0:(size - 1), 1)
-      outer = max(ceiling(n/10), 1)
-      inner = mod(n, 10) + 1
-      if(genome[[outer]][inner] != 'X'){
-        a = list(genome[[outer]][inner])
-        valid = FALSE
-      }
-    }
-    for(i in 2:y){
-      valid = TRUE
-      while(valid){
-        n = sample(0:(size - 1), 1)
-        outer = max(ceiling(n/10), 1)
-        inner = mod(n, 10) + 1
-        if(genome[[outer]][inner] != 'X'){
-          a[i] = list(genome[[outer]][inner])
-          valid = FALSE
-        }
-      }
     }
   }
   return(a)
 }
 
+#This function creates y fusion genes in genome. A fusion gene is the result of taking a
+#random number of exons from one gene, and concatenating it with the exons from an adjacent
+#gene.
 fusion_genes <- function(genome, y){
   genes = vector()
   for(i in 1:y){
@@ -74,16 +58,21 @@ fusion_genes <- function(genome, y){
     found_n = FALSE
     found = FALSE
     while(!found_n){
-    n = sample(1:(length(genome) - 1), 1) #length of genome is 1?
-    while(length(genome[[n]][[1]]) == 1){
-      n = sample(1:(length(genome) - 1), 1) #length of genome is 1?
-    }
-    counter = 1
-    while(!found && (n + counter <= length(genome))){
-      if(length(genome[[n + counter]][[1]]) == 1) counter = counter + 1
-      else found = TRUE
-    }
-    if(found) found_n = TRUE
+      if(length(genome) == 1)
+        n = 1
+      else
+        n = sample(1:(length(genome) - 1), 1) #length of genome is 1?
+      while(length(genome[[n]][[1]]) == 1){
+        n = sample(1:(length(genome) - 1), 1) #length of genome is 1?
+      }
+      counter = 1
+      while(!found && (n + counter <= length(genome))){
+        if(length(genome[[n + counter]][[1]]) == 1)
+          counter = counter + 1
+        else
+          found = TRUE
+      }
+      if(found) found_n = TRUE
     }
     genes = append(genes, c(n, n + counter))
     m_len = length(genome[[n]])
@@ -132,41 +121,8 @@ fusion_genes <- function(genome, y){
   return(z)
 }
 
-fusion_exons <- function(genome, y){ #fuses neighboring exons
-  size = length(genome) * 10 #generalize
-  for(i in 1:y){ #y is how many fusion events
-    valid = TRUE
-    counter = 0
-    while(valid && counter < 1000){
-      n = sample(0:(size - 2),1)
-      outer = max(ceiling(n/10), 1)
-      inner = mod(n, 10) + 1
-      if(genome[[outer]][inner] != "X"){
-        if(inner != 10){
-          if(genome[[outer]][inner + 1] != "X"){
-            valid = FALSE
-          }
-        }
-        else{
-          if(genome[[outer + 1]][1] != "X"){ #don't have to check case where outer out of                                 bounds since only sampled from 0:998
-            valid = FALSE
-          }
-        }
-      }
-      counter = counter + 1
-    }
-    if(counter == 1000) return(genome)
-    if(inner != 10){
-      genome[[outer]][inner] = list(append(unlist(genome[[outer]][inner]),unlist(genome[[outer]][inner + 1])))
-      genome[[outer]][inner + 1] = list('X')
-    }
-    else{
-      genome[[outer]][inner] = list(append(unlist(genome[[outer]][inner]),unlist(genome[[outer + 1]][1])))
-    }
-  }
-  return(genome)
-}
-
+#This function carves genome into length 15 strings and hashes the resulting substrings using
+#the hash package
 hash_exons <- function(genome){
   h = hash()
   for(i in 1:length(genome)){
@@ -238,7 +194,7 @@ scan_exons_adv <- function(coverage_genes, h_hash){
   }
   return(sort(unique(fusion)))
 }
-    
+
 test_genome <- function(n, m, genome, h_hash, adv = FALSE){
   if(!adv){
     c_a_false_exons = vector()
@@ -254,7 +210,7 @@ test_genome <- function(n, m, genome, h_hash, adv = FALSE){
       c_test = scan_exons_baseline(b_test, h_hash)
       output_a_c = setdiff(a_test[[2]], c_test[[2]])
       output_c_a = setdiff(c_test[[2]], a_test[[2]])
-
+      
       c_a_false_exons[i] = length(output_c_a) / length(c_test[[2]])
       missed_exons[i] = length(output_a_c) / length(a_test[[2]])
     }
@@ -282,7 +238,7 @@ test_genome <- function(n, m, genome, h_hash, adv = FALSE){
   z = list(output_a_c, output_c_a, missed_exons, mean(missed_exons), c_a_false_exons, mean(c_a_false_exons))
   return(z)
 }
-      
+
 x = c(1,10,100)
 z = c(1,2,5,10)
 y_naive = c(.408, .066, .056)
