@@ -1,0 +1,2 @@
+Optimizations
+	I added a counter of total entries in the B+ Tree to node/page 0. For example, on searching select count(*) from table the select function will simply pull the value in node/page 0 of the B+ tree rather than visit each leaf node.
