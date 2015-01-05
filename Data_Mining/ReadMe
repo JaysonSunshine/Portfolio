@@ -1,0 +1,3 @@
+I created tweet_sentiment.py. AFINN-111.txt provided by Coursera.
+
+A simple script that outputs the sentiment of tweets, acquired through Twitter's API v1.1, with the stripped text of the tweet.
