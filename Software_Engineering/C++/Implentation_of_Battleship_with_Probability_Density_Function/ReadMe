@@ -1,0 +1,10 @@
+Data structures
+	Board.cpp: The board is represented as a two-dimensional vector of chars
+	Player.cpp: 
+GoodPlayer: contains  a two-dimensional vector of int for storage of values in the probability density function
+	Contains a two-dimensional vector of char that keeps track of recommended attacks, hits, and misses, to allow calculation of ship placement probabilities
+		
+
+Good Player: 
+	Good player places his ships randomly, with a one buffer square surrounding, so that no ships will ever cluster, and that the boards will not be on the edge of the board.
+	Moves are recommended via a probability distribution function, i.e. all possible placements of ships remaining in legal locations are calculated.  If there are any hits on the board placements involving those squares are highly weighted.  When there are no hits for surviving ships, (ie the hit ships have been destroyed the hits are cleared to blocked squares.
