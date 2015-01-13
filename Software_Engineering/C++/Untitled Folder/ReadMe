@@ -1,0 +1,72 @@
+Sequence employs a doubly-linked list with a head and tail pointer.  The list is not circular, and there is no usage of sentinel nodes.  Each node contains an ItemType value, and two pointers of Node* to point to the previous and next nodes in the list.
+Pseudocode:
+Subsequence
+	Check boundary conditions
+	Copy 1st sequence
+Get first value of 2nd sequence
+Does 1st sequence contain this value?
+If yes, while there’s still sufficient space in seq1 to contain seq2
+	Get 2nd value of 1st sequence
+Get 2nd value of 2nd sequence
+Keep checking corresponding values until you find entire 2nd sequence in 1st sequence or not
+If you found entire 2nd sequence in 1st sequence, tell me where the 2nd sequence starts
+If not, delete the values in 1st sequence up until first value in 1st sequence which is the first value in the 2nd sequence
+Repeat
+
+Interleave
+	Create empty sequence temp
+	Check cases in which at least one of the two sequences is empty
+	If both sequences are non-empty, and 1st sequence is bigger
+		Copy 1st node of 1st sequence into 1st position of temp
+		Copy 1st node of 2nd sequence into 2nd position of temp
+		Repeat until shorter (2nd sequence) is exhausted
+		Copy remaining nodes from 1st (longer) sequence to temp
+	Do similar as above if 2nd sequence is bigger
+	Swap temp with result
+	Result’s old list is deleted on close of function
+
+Remove
+	Search list for value
+	If value found
+		Erase node
+		Search list again for value
+		Repeat
+
+	
+
+
+Test cases:
+	Create empty Sequence: ensure constructor works properly
+	Insert
+		Inappropriate position: boundary conditions are correct
+		Empty list: list head and tail are adjusted correctly
+		Beginning of nonempty list: inserted in proper location
+		End of nonempty list: inserted in proper location
+		Based off value: searches list appropriately
+	Erase
+		Erase from head: list adjusted correctly
+		Last entry: list adjusted correctly
+		Middle of nonempty list: general case
+	Remove
+		Value that occurs once: deletes correct amount of times
+		Value that occurs multiple times: delete all instances
+		Value that is not in list: doesn’t adjust list which doesn’t contain value
+	Get
+		Node from list: Was list created correctly?
+	Set
+		Node from list: List updated correctly?
+	Find
+		Value in list: correct location
+		Value not in list: indicates value not in list
+	Swap
+		Both Sequences are same sequence (alias): 
+		Sequences are different: sequences are swapped as expected
+	Subsequence
+		One or both lists are empty: indicates no subsequence
+		Sequence1 is shorter than sequence2: indicates no subsequence
+		Sequence1 contains sequence2: finds correct location
+		Sequence1 does not contain sequence2: indicates no subsequence
+	Interleave
+		One or both lists are empty: returns the non-empty sequences
+		Both sequence non-empty (general case): interleaves as expected
+Result is sequence1 or sequence2 (alias): doesn’t delete the aliased sequence before   interleaving
