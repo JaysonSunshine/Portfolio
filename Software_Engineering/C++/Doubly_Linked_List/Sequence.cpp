@@ -3,9 +3,9 @@
 #include "Sequence.h"
 using namespace std;
 
-Sequence::Sequence(const Sequence& other)//copy constructor (initialization
-								   //of new Sequence from existing Sequence
-{
+//copy constructor (initialization
+//of new Sequence from existing Sequence
+Sequence::Sequence(const Sequence& other){
 		m_size = other.m_size;
 
 		if(other.size() != 0) //if rhs isn't empty
@@ -39,11 +39,11 @@ Sequence::Sequence(const Sequence& other)//copy constructor (initialization
 			head = NULL;
 			tail = NULL;
 		}
-	}
+}
 
-bool Sequence::insert(int pos, const ItemType& value) //inserts new node into
-	//linked list at pos with value
-{
+//inserts new node into
+//linked list at pos with value
+bool Sequence::insert(int pos, const ItemType& value){
 	if(pos < 0 || pos > size()) //won't insert if out of bounds of linked list
 		return false;
 
@@ -96,15 +96,15 @@ bool Sequence::insert(int pos, const ItemType& value) //inserts new node into
 		return true;
 	}
 }
-      // Insert value into the sequence so that it becomes the item at
-      // position pos.  The original item at position pos and those that
-      // follow it end up at positions one higher than they were at before.
-      // Return true if 0 <= pos <= size() and the value could be
-      // inserted.  (It might not be, if the sequence has a fixed capacity,
-      // e.g., because it's implemented using a fixed-size array.)  Otherwise,
-      // leave the sequence unchanged and return false.  Notice that
-      // if pos is equal to size(), the value is inserted at the end.
 
+// Insert value into the sequence so that it becomes the item at
+// position pos.  The original item at position pos and those that
+// follow it end up at positions one higher than they were at before.
+// Return true if 0 <= pos <= size() and the value could be
+// inserted.  (It might not be, if the sequence has a fixed capacity,
+// e.g., because it's implemented using a fixed-size array.)  Otherwise,
+// leave the sequence unchanged and return false.  Notice that
+// if pos is equal to size(), the value is inserted at the end.
 bool Sequence::insert(const ItemType& value) //insert at location in list based off value
 {
 	Node* p;

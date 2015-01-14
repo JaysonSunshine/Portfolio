@@ -5,8 +5,8 @@ using namespace std;
 #ifndef SequenceClass
 #define SequenceClass
 
-typedef unsigned long ItemType; //INSIDE CLASS?
-//typedef std::string ItemType;
+//typedef unsigned long ItemType; //INSIDE CLASS?
+typedef std::string ItemType;
 
 
 class Sequence

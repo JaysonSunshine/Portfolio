@@ -1,3 +1,5 @@
+In order to successfully compile make Long, you must edit Sequence.h and change the typedef signature on line 8
+
 Sequence employs a doubly-linked list with a head and tail pointer.  The list is not circular, and there is no usage of sentinel nodes.  Each node contains an ItemType value, and two pointers of Node* to point to the previous and next nodes in the list.
 Pseudocode:
 Subsequence
