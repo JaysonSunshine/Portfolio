@@ -1,3 +1,5 @@
 I wrote the following code in approximately 4 hours.
 
 Sample class for holding, modifying, and retrieving orders containing a label, price, and size.
+
+To compile, include -std=c++11 flag.
