@@ -1,18 +1,8 @@
-
 # Name: Jay Cloyd
-#
-# UID: 504209098
-#
-# People I interacted with: 
-#
-# Resources I used: Google, StackOverflow for some function usage for Python, Python manual
-#
-
+#Sources I used: Google, StackOverflow for some function usage for Python, Python manual
 
 import math
 from struct import *
-
-# PROBLEM 1
 
 # parse the file named fname into a dictionary of the form 
 # {'width': int, 'height' : int, 'max' : int, 'pixels' : (int * int * int) list}
@@ -50,7 +40,6 @@ def unparsePPM(ppm, fname):
     flat_dlist = [y for x in dlist for y in x]
     for i in range(0, len(flat_dlist)):
         f.write(pack('B', flat_dlist[i]))
-# PROBLEM 2
 
 def negate(ppm):
     l = []
@@ -60,7 +49,6 @@ def negate(ppm):
     ppm['pixels'] = l
     return ppm
 
-# PROBLEM 3
 def mirrorImage(ppm):
     d = ppm
     width = d['width']
@@ -73,8 +61,6 @@ def mirrorImage(ppm):
         d['pixels'][i:length:width] = d['pixels'][(width - i - 1):length:width]
         d['pixels'][(width - i - 1):length:width] = swap
     return d
-
-# PROBLEM 4
 
 # produce a greyscale version of the given ppm dictionary.
 # the resulting dictionary should have the same format, 
@@ -101,9 +87,6 @@ def unparsePGM(pgm, fname):
     #flat_dlist = [y for x in dlist for y in x]
     for i in range(0, len(pgm['pixels'])):
         f.write(pack('B', pgm['pixels'][i]))
-
-
-# PROBLEM 5
 
 # gaussian blur code adapted from:
 # http://stackoverflow.com/questions/8204645/implementing-gaussian-blur-how-to-calculate-convolution-matrix-kernel
