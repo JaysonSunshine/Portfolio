@@ -4,14 +4,11 @@
 
 using namespace std;
 
+//this uses linear space, but it can be altered to use constant space
 void fibhelp(int n, int end, vector<long long>* memo){
 	if(n > end)
 		return;
-	if(n == 1){
-		(*memo).push_back(1);
-		fibhelp(n + 1, end, memo);
-	}
-	else if(n == 2){
+	if(n == 1 || n == 2){
 		(*memo).push_back(1);
 		fibhelp(n + 1, end, memo);
 	}
@@ -24,9 +21,7 @@ void fibhelp(int n, int end, vector<long long>* memo){
 long long fib(int n){
 	if(n < 1)
 		return 0;
-	if(n == 1)
-		return 1;
-	if(n == 2)
+	if(n <= 2)
 		return 1;
 	vector<long long> memo;
 	fibhelp(1, n, &memo);

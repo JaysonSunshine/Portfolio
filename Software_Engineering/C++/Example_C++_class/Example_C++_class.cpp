@@ -31,7 +31,6 @@ class OrderBook{
 double OrderBook::get_price(char side,int level){
 	if(level < 1)
 		level = 1; //could alternatively fail with message to user
-	int loc = 1;
 	map<double, int>::iterator ps;
 	if(side == 'B' || side == 'b'){ //what should we do if call get_price on empty orders?
 		if(level >= buy_aggr.size()){ //could return with message to user
@@ -88,7 +87,7 @@ int OrderBook::get_size(char side,int level){
 void OrderBook::add(int order_id,char side,double price,int size){
 	unordered_map<int, order>::iterator it;
 	it = orders.find(order_id);
-	if(it == orders.end()){
+	if(it == orders.end()){ //message to user on duplicate insert?
 		order new_order;
 		new_order.side = side;
 		new_order.price = price;
@@ -120,7 +119,7 @@ void OrderBook::modify(int order_id,int new_size){
 	}
 }
 
-void OrderBook::remove(int order_id){ //THE MAP STRUCTURE DOESN'T ALLOW DUPLICATES
+void OrderBook::remove(int order_id){
 	unordered_map<int, order>::iterator it;
 	it = orders.find(order_id);
 	if(it == orders.end())

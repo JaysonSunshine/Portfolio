@@ -14,6 +14,7 @@ struct Node
 	Node(const string& s, int i) : seq(s){loc.push_back(i);}
 };
 
+//Hash table with chaining
 class HashTable
 {
 	public:
