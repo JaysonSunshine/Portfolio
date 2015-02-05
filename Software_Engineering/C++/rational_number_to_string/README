@@ -1,0 +1,14 @@
+compile: g++ -std=c++11 -o rational rational.cpp
+
+The idea is to keep the string we're producing. For each value we've seen as the 'numerator' we hash this with a key of its location in the result string. If we get a terminating decimal we print the result. If we reach the same numerator we've seen before, the repeating portion is the index of this numerator to the end of the result.
+
+Example
+
+8 7 = '1.', rem = 1
+10 7 = 1, rem = 3; index = 0
+30 7 = 4, rem = 2; index = 1
+20 7 = 2, rem = 6; index = 2
+60 7 = 8, rem = 4; index = 3
+40 7 = 5, rem = 5; index = 4
+50 7 = 7, rem = 1; index = 5
+10 7; we've seen 10 before at index 0 and so the repeating portion is the result string from 0 to the end, which in this case is the whole decimal portion

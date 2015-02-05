@@ -18,7 +18,6 @@ def prune(nodes, edges, size, count, initial):
     count += prune(nodes, edges, size - 2, 0, initial)
     return count
      
-
 #this function will turn a tree of even nodes into a forest of maximum number of 
 #trees, all with even nodes, by pruning as many edges as possible from the
 #original tree  
