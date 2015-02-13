@@ -4,17 +4,17 @@ library(hash) #this package allows for usage of hash-implemented data structures
 #normal distribution with mean 150 and standard deviation 35, simulating the coding
 #portion of exons in DNA. n is the number of simulated genes this function will
 #generate
-gene <- function(n){ #min exon length is 30
-  size = rnorm(1,150,35)
+gene <- function(n, mean = 150, sd = 35){ #min exon length is 30
+  size = floor(rnorm(1, mean,sd))
   while(size < 30){
-    size = rnorm(1,150,35)
+    size = floor(rnorm(1,mean,sd))
   }
   a = list(sample(c("A", "C", "G", "T"),size, replace = TRUE))
   if(n > 1){
     for(i in 2:n){
-      size = rnorm(1,150,35)
+      size = floor(rnorm(1,mean,sd))
       while(size < 30){
-        size = rnorm(1,150,35)
+        size = floor(rnorm(1,mean,sd))
       }
       a[i] = list(sample(c("A", "C", "G", "T"),size, replace = TRUE))
     }
@@ -22,13 +22,13 @@ gene <- function(n){ #min exon length is 30
   return(a)
 }
 
-#genome creates a simulated genome containing n genes each containing 10 exons produced from
+#genome creates a simulated genome containing n genes each containing exons number of exons produced from
 #the gene function
-genome <- function(n){
-  a = list(gene(10))
+genome <- function(n, exons=10){
+  a = list(gene(exons))
   if(n > 1){
     for(i in 2:n){
-      a[i] = list(gene(10))
+      a[i] = list(gene(exons))
     }
   }
   return(a)
@@ -61,9 +61,9 @@ fusion_genes <- function(genome, y){
       if(length(genome) == 1)
         n = 1
       else
-        n = sample(1:(length(genome) - 1), 1) #length of genome is 1?
+        n = sample(1:(length(genome) - 1), 1)
       while(length(genome[[n]][[1]]) == 1){
-        n = sample(1:(length(genome) - 1), 1) #length of genome is 1?
+        n = sample(1:(length(genome) - 1), 1)
       }
       counter = 1
       while(!found && (n + counter <= length(genome))){
@@ -245,7 +245,7 @@ y_naive = c(.408, .066, .056)
 y_adv = c(.365, .206, 0.048, 0.049)
 y_naive_fp = c(0.021, 0.021, 0.036)
 y_adv_fp = c(0,0,0,0)
-plot(x_naive,y_naive,col = "blue", log ="x", main = 'Missed Fusion Gene Rate', xlab = "Coverage", ylab = 'Missed Fusion Gene Rate', ylim = c(0, 0.41), pch = 19)
+plot(x,y_naive,col = "blue", log ="x", main = 'Missed Fusion Gene Rate', xlab = "Coverage", ylab = 'Missed Fusion Gene Rate', ylim = c(0, 0.41), pch = 19)
 legend(20, 0.3, c("Naive", "Advanced"), lty=c(1,1), col = c("blue", "red"))
 lines(x,y_naive, col = "blue")
 points(z, y_adv, col = 'red', pch = 19)
