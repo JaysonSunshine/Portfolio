@@ -2,8 +2,7 @@ library(hash) #this package allows for usage of hash-implemented data structures
 
 #This function generates a string composed of the letters A, C, G, and T with length from
 #normal distribution with mean 150 and standard deviation 35, simulating the coding
-#portion of exons in DNA. n is the number of simulated genes this function will
-#generate
+#portion of exons in DNA. n is the number of exons in the simulated gene
 gene <- function(n, mean = 150, sd = 35){ #min exon length is 30
   size = floor(rnorm(1, mean,sd))
   while(size < 30){
@@ -51,16 +50,19 @@ reads <- function(genome, y){
 #random number of exons from one gene, and concatenating it with the exons from an adjacent
 #gene.
 fusion_genes <- function(genome, y){
+  if(length(genome) == 1)
+    return(genome)
   genes = vector()
   for(i in 1:y){
     n = integer()
     counter = integer()
     found_n = FALSE
     found = FALSE
-    while(!found_n){
-      if(length(genome) == 1)
-        n = 1
-      else
+    while(!found_n){ #this loop is not efficient; if a randomly selected gene cannot be fused with the next gene
+      #if it can't, it tries again
+      #if(length(genome) == 1)
+        #n = 1
+      #else
         n = sample(1:(length(genome) - 1), 1)
       while(length(genome[[n]][[1]]) == 1){
         n = sample(1:(length(genome) - 1), 1)
@@ -142,7 +144,7 @@ hash_exons <- function(genome){
   return(h)
 }
 
-hash_exons_adv <- function(genome){
+hash_exons_adv <- function(genome){#this does not use a rolling hash, so it is rather inefficient
   h = hash()
   for(i in 1:length(genome)){
     for(l in 1:length(genome[[i]])){
@@ -259,3 +261,7 @@ h_naive = hash_exons(g)
 h_adv = hash_exons_adv(g)
 
 test_genome(10,500, g, h_adv)
+n = 10
+m = 500
+genome = g
+h_hash = h_adv
