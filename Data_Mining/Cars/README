@@ -1,0 +1,7 @@
+http://www.nhtsa.gov/Laws+&+Regulations/CARS+Program+Transaction+Data+and+Reports
+
+cars.py produce all images in this directy except Treemap.png; also produces output
+
+cars_python_to_r_output.py is a version of cars.py that produces output_for_R, necessary at beginning of workflow.r
+
+workflow.r produces treemap.png and Figure 7 in report.docx

@@ -1,0 +1,137 @@
+---
+title: "Spam Prediction in the Spam (kernlab) Dataset"
+author: "JaysonSunshine"
+date: "02/19/2015"
+output: html_document
+---
+
+```{r}
+library(kernlab)
+set.seed(12345)
+data(spam)
+```
+
+First, we look at the spam dataset:
+```{r}
+head(spam)
+```
+
+The spamPredictor function uses only the 'your' feature from the spam dataset to predict spam v. non-spam. spamPredictor finds the optimal threshold to maximize accuracy using only this feature
+```{r}
+spamPredictor <- function(spam){
+  vals = seq(0,11.1,by=0.1)
+  optimal_pos = 0
+  optimal_neg = 0
+  optimal_acc = 0
+  pos = 0
+  neg = 0
+  acc_loc = 0
+  ns_vals = double()
+  ns_sensitivity = double()
+  ns_specificity = double()
+  accuracy = double()
+  s_vals = double()
+  steps = double()
+  for(i in vals){
+    prediction <- ifelse(spam$your > i, "spam", "nonspam")
+    x <- table(prediction, spam$type)/length(spam$type)
+    ns <- x[1,1] / (x[1,1] + x[1,2])
+    ns_sens <- x[1,1] / (x[1,1] + x[2,1])
+    ns_spec <- x[2,2] / (x[1,2] + x[2,2])
+    ns_vals <- c(ns_vals, ns)
+    ns_sensitivity <-c(ns_sensitivity, ns_sens)
+    ns_specificity <-c(ns_specificity, ns_spec)
+    steps = c(steps, i)
+    if(ns > pos){
+      pos = ns
+      optimal_pos = i
+    }
+    s <- x[2,2] / (x[2,1] + x[2,2])
+    if(s > neg){
+      neg = s
+      optimal_neg = i
+    }
+    acc = (x[1,1] + x[2,2]) / sum(x)
+    if(acc > optimal_acc){
+      optimal_acc = acc
+      optimal_loc = i
+    }
+    s_vals <- c(s_vals, s)
+    accuracy <- c(accuracy,acc)
+  }
+  #old.par <- par(mfrow=c(2, 1))
+  #dev.new(width = 5, height = 4)
+  plot(steps, ns_vals, xlab = "Number of 'your' occurrences",type='l',
+       col=2, ylim = c(0,1), main = "Positive and negative predictive power", ylab="" )
+  lines(steps, s_vals, col=3)
+  lines(steps, accuracy, col=4)
+  legend(0.4,1,c("Positive predictive value", "Negative predictive value", "Accuracy"), col=c(2,3,4), lty=c(1,1), cex =0.7)
+  plot(1 - ns_specificity, ns_sensitivity, col="green", type='l', ylim = c(0,1),
+       xlab = "1 - specificity", ylab = "Sensitivity", main = "ROC")
+  points(steps, steps)
+  #lines(steps, ns_specificity, col="orange")
+  #par(old.par)
+  z = list("optimal_pos_loc" = optimal_pos, "optimal_pos_val" = pos, "optimal_neg_loc" = optimal_neg, "optimal_neg_val" = neg, "optimal_acc_loc" = optimal_loc, "optimal_acc_val" = 
+             optimal_acc)
+  return(z)
+}
+results = spamPredictor(spam)
+results
+```
+
+The above analysis shows that for single variable analysis, using only the number of occurrences of 'your' in the email, we can achieve a spam v. non-spam accuracy of 75.7% by using a threshold value of 0.6.
+
+Next, we use the caret package to explore several other more robust models in which all features of the spam dataset are used.
+```{r}
+library(caret)
+
+#60% of our values are used for constructing the training set
+inTrain <- createDataPartition(y=spam$type, p=0.6, list=FALSE)
+
+training <-spam[inTrain,]
+testing <- spam[-inTrain,]
+
+suppressWarnings(modelFit_glm <- train(type ~., data=training, method="glm"))
+modelFit_glm
+
+predictions <- predict(modelFit_glm, newdata=testing)
+confusionMatrix(predictions, testing$type)
+```
+
+Using a generalized linear model with all features of spam dataset, we achieve an accuracy of 91.79% on the training set and 92.5% on the test set
+
+```{r, echo=FALSE}
+capture.output(modelFit_gbm <- train(type ~., data=training, method="gbm"), file='NUL')
+modelFit_gbm
+predictions <- predict(modelFit_gbm, newdata=testing)
+confusionMatrix(predictions, testing$type)
+```
+
+Using stochastic gradient boosting, using all features of the spam dataset, we achieve an accuracy of 94.52% on the training set and 93.75% accuracy on the test set.
+
+```{r}
+suppressWarnings(modelFit_svm <- train(type ~., data=training, method="svmLinear"))
+modelFit_svm
+predictions <- predict(modelFit_svm, newdata=testing)
+confusionMatrix(predictions, testing$type)
+```
+A support vector machine with linear kernel provides 92.55% accuracy on training set and 92.66% accuracy on test set.
+
+We achieve accuracy of over 91.9% with a random forest. (results not shown)
+
+```{r}
+modelFit_rpart <- train(type ~., data=training, method="rpart")
+modelFit_rpart
+predictions <- predict(modelFit_rpart, newdata=testing)
+confusionMatrix(predictions, testing$type)
+```
+We achieve an accuracy of 82.16% on the training set using classification and regression trees (CART), and 81.47% accurac on the test set.
+
+```{r}
+capture.output(modelFit_nnet <- train(type ~., data=training, method="nnet"), file='NUL')
+modelFit_nnet
+
+predictions <- predict(modelFit_nnet, newdata=testing)
+confusionMatrix(predictions, testing$type)
+```
+Using a neural network with the default of 100 iterations we get 93.37% accuracy on the training set, and 94.08% on the test set.

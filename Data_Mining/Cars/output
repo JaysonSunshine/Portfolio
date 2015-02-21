@@ -1,0 +1,54 @@
+Data for Figure 1
+['15.70', '24.87'] ['2.23', '5.89'] 
+
+Data for figure 4
+['25.88', '24.37', '24.74', '24.76'] ['6.73', '5.51', '5.75', '5.58']
+
+Data for figure 5
+['1.64', '1.56', '1.57', '1.57'] ['0.43', '0.35', '0.37', '0.35']
+
+Data for figures 2 and 3
+Best states by ratio
+1  =  UT 1.66 west
+2  =  CA 1.65 west
+3  =  OR 1.65 west
+4  =  MT 1.64 west
+5  =  CO 1.64 west
+6  =  AZ 1.64 west
+7  =  WA 1.62 west
+8  =  NV 1.62 west
+9  =  NM 1.61 west
+10  =  ID 1.61 west
+Worst states by ratio
+50  =  LA 1.51 south
+49  =  MI 1.53 midwest
+48  =  MS 1.54 south
+47  =  AL 1.54 south
+46  =  AK 1.55 west
+45  =  SC 1.56 south
+44  =  HI 1.56 west
+43  =  DE 1.56 south
+42  =  IL 1.56 midwest
+41  =  GA 1.56 south
+Best states by new mpg
+1  =  CA 26.42 west
+2  =  OR 25.53 west
+3  =  AZ 25.52 west
+4  =  WA 25.42 west
+5  =  VA 25.30 south
+6  =  FL 25.28 south
+7  =  NV 25.25 west
+8  =  CT 25.23 northeast
+9  =  UT 25.21 west
+10  =  CO 25.18 west
+Worst states by new mpg
+50  =  AK 22.94 west
+49  =  WY 23.18 west
+48  =  SD 23.35 midwest
+47  =  NE 23.48 midwest
+46  =  LA 23.60 south
+45  =  ND 23.67 midwest
+44  =  MI 23.76 midwest
+43  =  AR 23.76 south
+42  =  MS 23.86 south
+41  =  OK 24.06 south
